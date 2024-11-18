@@ -192,7 +192,7 @@ function addPaper(result) {
 	let dotClass = result.score >= 0.80 ? "dot_green" : "dot_orange";
 	return `<div class="search_result result_clickable" onclick="resultClicked(this)">
     <div class="result_top">
-    <div class="result_year black"><p>${result.month} ${result.year}</p></div>
+    <div class="result_year black"><p>${result.year}</p></div>
     <div class="result_score black" title="Cosine similarity">
         <p>${result.score}</p>
         <div class="result_dot ${dotClass}"></div>
@@ -202,16 +202,16 @@ function addPaper(result) {
     ${result.title}
     </p>
     <p class="result_authors">${result.authors}</p>
-    <p class="result_abstract truncated_text black">${result.abstract}</p>
+    <!-- <p class="result_abstract truncated_text black">${result.abstract}</p> -->
     <div class="result_button_container">
     <div class="result_button_flex">
-        <a href="https://arxiv.org/abs/${result.id}" target="_blank">
+        <a href="https://doi.org/${result.id.replace("#","/")}" target="_blank">
         <div class="result_button">
             <div class="go_to_symbol"></div>
             <p>Go to Paper</p>
         </div>
         </a>
-        <a href="/?q=${encodeURIComponent("https://arxiv.org/abs/" + result.id)}" target="_blank">
+        <a href="/?q=${encodeURIComponent(result.id)}" target="_blank">
         <div class="result_button">
             <div class="similarity_symbol"></div>
             <p>Find Similar</p>

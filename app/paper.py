@@ -6,11 +6,11 @@ class Paper(dict):
         self.score = round(match["score"], 2)
         
         metadata = match["metadata"]
-        self.title = metadata["title"]
-        self.authors = metadata["authors"]
-        self.abstract = metadata["abstract"]
-        self.year = metadata["year"]
-        self.month = metadata["month"]
+        self.title = metadata["title"] if "title" in metadata else "notitle"
+        self.authors = metadata["authors"]  if "authors" in metadata else "noauthors"
+        self.abstract = metadata["abstract"]  if "abstract" in metadata else "noabstract"
+        self.year = metadata["year"]  if "year" in metadata else "noyear"
+        self.month = metadata["month"]  if "month" in metadata else "nomonth"
         
         authors_parsed = self.authors.split(",")
         self.authors_parsed = [author.strip() for author in authors_parsed]

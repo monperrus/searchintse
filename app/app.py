@@ -11,7 +11,7 @@ app = flask.Flask(__name__)
 
 # use OpenAI API key
 openai.api_key = os.environ["OPENAI_API_KEY"]
-MODEL = "text-embedding-ada-002"
+MODEL = "text-embedding-3-small"
 
 # connect to Pinecone
 pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
