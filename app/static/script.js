@@ -252,7 +252,7 @@ function addAuthor(author) {
 			<p class="black">Based on your query, we retrieved 100 papers. Of those, <b>${author.author}</b> was (co-) author on <b>${author.papers.length}</b>.</p>
 		</div>`
 	author.papers.forEach(paper => {
-		html += `<a href="https://arxiv.org/abs/${encodeURIComponent(paper.id)}" class="author_paper" target="_blank">${paper.title}</a>`;
+		html += `<a href="https://doi.org/${encodeURIComponent(paper.id.replace("#","/"))}" class="author_paper" target="_blank">${paper.title}</a>`;
 	});
 	html += "</div>"
 	return html
