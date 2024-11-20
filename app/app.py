@@ -21,6 +21,10 @@ index = pc.Index("search-the-arxiv")
 def home():
     return render_template("index.html")
 
+@app.route("/annotations")
+def annotations():
+    return open("tse.csv").read()
+
 @app.route("/about")
 def about():
     return render_template("about.html")

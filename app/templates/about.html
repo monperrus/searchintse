@@ -16,18 +16,20 @@
   <body>
     <div id="header">
       <a id="logo" href="/"><span class="black">search</span><span class="gray">the</span><span class="red">arXiv</span></a>
-      <div id="right_header">
-        <a class="header_link" href="about"><span class="black">about</span></a>
-      </div>
     </div>
     <div id="container" style="margin-bottom:50px;">
       <p id="about_title" class="black">about</p>
-      <p class="about_text black">search the arXiv uses OpenAI's <span class="code">text-embedding-ada-002</span> model to embed the abstract of over 300,000 machine learning papers from arXiv. The papers are regularly sourced from the <a href="https://www.kaggle.com/datasets/Cornell-University/arxiv" target="_blank">arXiv metadataset over on Kaggle</a> and filtered to include only those belonging to</p>
+      <p class="about_text black">Usage: you copy the title of the submitted paper and get the most competent reviewers from the TSE author community via "Reviewers".</p>
       <p class="about_text black">
-        cs.CV, cs.LG, cs.CL, cs.AI, cs.NE, cs.RO
+        What criteria does it use to select people from the TSE author community? 
+        Having published at least once in TSE
       </p>
-      <p class="about_text black">When you perform a search, your query is embedded using the same model after which the 10 papers with the highest cosine similarity to the query embedding are returned.</p>
-      <p class="about_text black">This is a personal project meant as an experiment more than anything else. You can find the source code on <a href="https://github.com/augustwester/searchthearxiv" target="_blank">GitHub</a>, the embeddings on <a href="https://www.kaggle.com/datasets/awester/arxiv-embeddings" target="_blank">Kaggle</a>, and me on <a href="https://twitter.com/augustwester" target="_blank">Twitter</a> 🤗</p>
+      <p class="about_text black">
+        What are the differences w.r.t the Manuscript Central reviewer search functionality?<br/>
+1) Manuscript Central recommends beyond the TSE author community, it recommends in the whole IEEE / MC database <br/>
+2) Manuscript Central use an inferior recommendation algorithm<br/>
+3) Manuscript Central decorates the Reviewer results with the <a href="">reviewer credit</a>.<br/>
+      </p>
     </div>
   </body>
 </html>

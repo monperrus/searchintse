@@ -258,6 +258,10 @@ p, a {
     background-color: rgb(100,215,102);
 }
 
+.dot_red {
+    background-color: red;
+}
+
 .dot_orange {
     background-color: rgb(241,146,54);
 }

@@ -1,6 +1,24 @@
+var globalCSVData;
+
 $(window).bind("load", function () {
 	results = null;
 	currentTab = "papers";
+
+
+	$.ajax({
+		url: "/annotations",
+		type: "GET",
+		success: function (data) {
+			// Parse CSV with papaparse
+			Papa.parse(data, {
+				header: true,
+				complete: function (results) {
+					globalCSVData = results.data;
+				}
+			});
+
+		}
+	});
 
 	f = document.getElementById("query_field");
 	f.style.height = "0px";
@@ -62,6 +80,8 @@ $(window).bind("load", function () {
 			return false;
 		}
 	});
+
+
 });
 
 function togglePapersTab(animated) {
@@ -121,7 +141,6 @@ function performSearch() {
 	$.getJSON("/search", {
 		query: queryVal
 	}, function (data) {
-		console.log(data)
 		field.style.animationName = "";
 		field.readOnly = false;
 		if (data["error"] == null) {
@@ -225,6 +244,7 @@ function addPaper(result) {
 function addAuthors(authors) {
 	$("#results").empty();
 	var html = '<div id="authors_flex">';
+
 	authors.forEach(author => {
 		html += addAuthor(author)
 	})
@@ -235,12 +255,26 @@ function addAuthors(authors) {
 }
 
 function addAuthor(author) {
-	let dotClass = author.avg_score >= 0.80 ? "dot_green" : "dot_orange";
+	// if the author is in globalCSVData, add the annotations
+	author.annotation = {};
+	if (globalCSVData) {
+		    // swith author.author to lastname, firstname
+			if (!author.author.includes(",")) {
+				author.author = author.author.split(" ").reverse().join(", ");
+			}
+			let annotationData = globalCSVData.find(p => p["Author Full Name"] == author.author);
+			if (annotationData) {
+				author.annotation = annotationData;
+				author.annotation.show = annotationData["Reviewer Debt (Accepted Papers * 3 - Reviews Completed - Papers Handled) "];
+			}
+	}
+	let dotClass = author.annotation.show >= 0 ? "dot_green" : "dot_orange";
+	tooltip = JSON.stringify(author.annotation).replaceAll('"', "");
 	html = `<div class="author_container">
-    <div class="author_top_row">
+    <div class="author_top_row" title="${tooltip}">
     <p class="author_name black">${author.author}</p>
-    <div class="result_score black" title="Average cosine similarity">
-        <p>${author.avg_score}</p>
+    <div class="result_score black">
+        <p>credit:${author.annotation.show}</p>
         <div class="result_dot ${dotClass}"></div>
     </div>
     </div>
