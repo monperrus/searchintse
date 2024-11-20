@@ -7,6 +7,7 @@ COPY paper.py .
 COPY static static/
 COPY templates templates/
 COPY requirements.txt .
+COPY *.csv .
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
