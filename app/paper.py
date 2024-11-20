@@ -12,5 +12,6 @@ class Paper(dict):
         self.year = metadata["year"]  if "year" in metadata else "noyear"
         self.month = metadata["month"]  if "month" in metadata else "nomonth"
         
-        authors_parsed = self.authors.split(",")
-        self.authors_parsed = [author.strip() for author in authors_parsed]
+        self.authors_parsed = self.authors
+        if type(self.authors) == str:
+            self.authors_parsed = [author.strip() for author in self.authors.split(",")]
