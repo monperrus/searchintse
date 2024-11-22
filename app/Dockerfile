@@ -12,4 +12,5 @@ COPY *.csv .
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
-CMD gunicorn --bind 127.0.0.1:8000 app:app
+# we bind on all ports in the docker container but only on localhost on the host 127.0.0.1:8000:8000
+CMD gunicorn --bind 0.0.0.0:8000 app:app
