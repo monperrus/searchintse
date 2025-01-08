@@ -16,7 +16,7 @@ def compute_score(papers):
 
 def max_score(papers):
     # max is much better as usual, think fuzzy logic
-    final_score = max([p.score for p in papers]))
+    final_score = max([p.score for p in papers])
     return round(final_score, 2)
 
 def avg_score(papers):
