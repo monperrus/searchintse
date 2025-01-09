@@ -31,9 +31,9 @@ def get_matches(index, k, vector=None, id=None, exclude=None):
         top_k = index.query(id=id, top_k=k, include_metadata=True)
     matches = top_k["matches"]
     papers = [Paper(match) for match in matches if match["id"] != exclude]
-    authors = get_authors(papers)
+    authors = get_authors(papers)[:k]
     
-    papers = [paper.__dict__ for paper in papers[:10]]
+    papers = [paper.__dict__ for paper in papers[:k]]
     return json.dumps({"papers": papers, "authors": authors})
 
 def get_authors(papers):
@@ -47,7 +47,7 @@ def get_authors(papers):
                 for author, papers in authors.items()]
     authors = sorted(authors, key=lambda e: e["avg_score"], reverse=True)
     authors = sorted(authors, key=lambda e: len(e["papers"]), reverse=True)
-    return authors[:10]
+    return authors
 
 def error(msg):
     return json.dumps({"error": msg})
