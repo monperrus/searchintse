@@ -46,7 +46,7 @@ def get_authors(papers):
                 "avg_score": compute_score(papers)}
                 for author, papers in authors.items()]
     authors = sorted(authors, key=lambda e: e["avg_score"], reverse=True)
-    authors = sorted(authors, key=lambda e: len(e["papers"]), reverse=True)
+    # authors = sorted(authors, key=lambda e: len(e["papers"]), reverse=True)
     return authors
 
 def error(msg):
