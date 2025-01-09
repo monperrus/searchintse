@@ -265,10 +265,11 @@ function addAuthor(author) {
 			let annotationData = globalCSVData.find(p => p["Author Full Name"] == author.author);
 			if (annotationData) {
 				author.annotation = annotationData;
-				author.annotation.show = annotationData["Reviewer Debt (Accepted Papers * 3 - Reviews Completed - Papers Handled) "];
+				// the csv is the debt 
+				author.annotation.show = -annotationData["Reviewer Debt (Accepted Papers * 3 - Reviews Completed - Papers Handled) "];
 			}
 	}
-	let dotClass = author.annotation.show >= 0 ? "dot_green" : "dot_orange";
+	let dotClass = author.annotation.show > 0 ? "dot_green" : "dot_orange";
 	tooltip = JSON.stringify(author.annotation).replaceAll('"', "");
 	html = `<div class="author_container">
     <div class="author_top_row" title="${tooltip}">
