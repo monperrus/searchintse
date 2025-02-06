@@ -91,7 +91,7 @@ def search():
     
     # old version for TSE, using openai
     print(request.host)
-    if request.host == "localhost" or request.host.startswith("0.0.0.0")  or request.host.startswith("127.0.0.1"):
+    if request.host == "localhost" or request.host.startswith("0.0.0.0")  or request.host.startswith("127.0.0.1") or request.host.startswith("tse.local"):
         embed = get_embedding(query, MODEL)
     elif request.host.startswith("se-search"):
         embed = get_ollama_embedding(query, model)
