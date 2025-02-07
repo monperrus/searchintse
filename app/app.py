@@ -62,6 +62,10 @@ CONFIG = {
     }
 }
 
+@app.route("/config")
+def config():
+    return flask.jsonify(CONFIG[request.host])
+
 @app.route("/")
 def home():
     # split request.host in name port
