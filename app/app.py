@@ -45,12 +45,29 @@ def get_ollama_embedding(text: str, model: str) -> list:
     response.raise_for_status()
     return response.json().get('embedding', [])
 
+CONFIG = {
+    "tse.local:8083": {
+        "site_title": "Semantic TSE Reviewer Search",
+        "label_people": "Reviewers",
+        "model": "text-embedding-3-small",
+        "embedding_fn": get_embedding,
+        "capabilites": ["credit"]
+    },
+    "se-search.local:8083": {
+        "site_title": "Semantic Software Engineering Search",
+        "label_people": "Authors",
+        "model": "mxbai-embed-large",
+        "embedding_fn": get_ollama_embedding,
+        "capabilites": ["credit"]
+    }
+}
+
 @app.route("/")
 def home():
     # split request.host in name port
     site_title = request.host.split(":")[0] if ":" in request.host else request.host
     
-    return render_template("index.html", site_title=site_title)
+    return render_template("index.html", site_title=CONFIG[request.host]["site_title"], label_people = CONFIG[request.host]["label_people"])
 
 @app.route("/annotations")
 def annotations():
