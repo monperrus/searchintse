@@ -50,14 +50,14 @@ CONFIG = {
         "site_title": "Semantic TSE Reviewer Search",
         "label_people": "Reviewers",
         "model": "text-embedding-3-small",
-        "embedding_fn": get_embedding,
+        "embedding_fn": "get_embedding",
         "capabilites": ["credit"]
     },
     "se-search.local:8083": {
         "site_title": "Semantic Software Engineering Search",
         "label_people": "Authors",
         "model": "mxbai-embed-large",
-        "embedding_fn": get_ollama_embedding,
+        "embedding_fn": "get_ollama_embedding",
         "capabilites": ["credit"]
     }
 }
