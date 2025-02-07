@@ -156,6 +156,11 @@ def search():
     if len(query) > 1000:
         return error("Sorry! The length of your query cannot be too long.")
     
+    if query.startswith("similar:"):
+        paper_id = query.split(":")[-1]
+        embed = get_embedding(paper_id)
+        return get_matches(index, K, vector=embed, exclude=paper_id)
+
     # old version for TSE, using openai
     embed = get_cached_embedding(query, model)
     
@@ -172,12 +177,12 @@ def robots():
         content = f.read()
     return content
 
-@app.route("/embedding")
-def get_embedding_route():
+def get_embedding(paper_id):
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
     index = pc.Index(CONFIG[request.host]["index"])
-    paper_id = request.args.get("id")
-    # print("paper_id",paper_id)
     data = index.fetch([paper_id])
-    # print(data)
-    return flask.jsonify(data["vectors"][paper_id]["values"])
+    return data["vectors"][paper_id]["values"]
+
+@app.route("/embedding")
+def get_embedding_route():
+    return flask.jsonify(get_embedding(request.args.get("id")))

@@ -240,12 +240,12 @@ function addPaper(result) {
         </div>
         </a>
         <!-- find similar -->
-		<!-- <a href="/?q=${encodeURIComponent(result.id)}" target="_blank">
+		<a href="/?q=similar:${encodeURIComponent(result.id)}" target="_blank">
         <div class="result_button">
             <div class="similarity_symbol"></div>
             <p>Find Similar</p>
         </div>
-        </a> -->
+        </a>
         <div class="result_button" onclick="showEmbedding('${result.id}', event)">
             <div class="embedding_symbol"></div>
             <p>Show Embedding</p>
