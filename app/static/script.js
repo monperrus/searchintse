@@ -233,7 +233,7 @@ function addPaper(result) {
     <!-- <p class="result_abstract truncated_text black">${result.abstract}</p> -->
     <div class="result_button_container">
     <div class="result_button_flex">
-        <a href="https://doi.org/${result.id.replace("#","/")}" target="_blank">
+        <a href="${result.url}" target="_blank">
         <div class="result_button">
             <div class="go_to_symbol"></div>
             <p>Go to Paper</p>

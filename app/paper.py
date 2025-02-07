@@ -8,8 +8,17 @@ class Paper(dict):
         metadata = match["metadata"]
         self.title = metadata["title"] if "title" in metadata else "notitle"
         self.authors = metadata["authors"]  if "authors" in metadata else "noauthors"
-        self.abstract = metadata["abstract"]  if "abstract" in metadata else "noabstract"
         self.year = metadata["year"]  if "year" in metadata else "noyear"
+
+        self.url = ""
+        if "url" in metadata:
+            self.url = metadata["url"]
+        elif "doi" in metadata:
+            self.url = f"https://doi.org/{metadata['doi']}"
+        else:
+            self.url = f"https://doi.org/{self.id.replace('#', '/')}"
+
+        self.abstract = metadata["abstract"]  if "abstract" in metadata else "noabstract"
         self.month = metadata["month"]  if "month" in metadata else "nomonth"
         
         self.authors_parsed = self.authors
