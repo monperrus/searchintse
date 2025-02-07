@@ -47,7 +47,10 @@ def get_ollama_embedding(text: str, model: str) -> list:
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # split request.host in name port
+    site_title = request.host.split(":")[0] if ":" in request.host else request.host
+    
+    return render_template("index.html", site_title=site_title)
 
 @app.route("/annotations")
 def annotations():
