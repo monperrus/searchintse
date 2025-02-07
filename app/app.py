@@ -126,7 +126,7 @@ def annotations():
 
 @app.route("/about")
 def about():
-    return render_template(f"about-{request.host}.html")
+    return render_template(f"about-{request.host}.html", model = CONFIG[request.host]["model"])
 
 @app.route("/search")
 def search():

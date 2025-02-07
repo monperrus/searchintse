@@ -15,7 +15,50 @@
   </head>
   <body>
     <div id="container" style="margin-bottom:50px;">
-      WIP
+      <h1 class="about_title black">About Semantic Software Engineering Search</h1>
+      
+      <p class="about_text black">
+        This search engine helps you explore software engineering research papers using semantic search technology. 
+        It contains over 150,000 papers from major software engineering venues and journals.
+      </p>
+
+      <h2 class="about_subtitle black">How it works</h2>
+      <p class="about_text black">
+        Papers are converted into high-dimensional vectors (embeddings) using {{ model }}. 
+        Each paper's embedding captures its semantic meaning in 1024 dimensions, allowing 
+        for concept-based searching rather than just keyword matching.
+      </p>
+
+      <h2 class="about_subtitle black">Features</h2>
+      <ul class="about_list black">
+        <li>Natural language queries - describe what you're looking for in plain English</li>
+        <li>Semantic similarity - find papers with similar concepts, not just matching words</li>
+        <li>Vector visualization - explore the embedding space through interactive visualizations</li>
+        <li>"Find Similar" - discover related papers based on semantic similarity</li>
+      </ul>
+
+      <h2 class="about_subtitle black">Data Sources</h2>
+      <p class="about_text black">
+        Papers are sourced from Crossref's extensive academic database using their public API. 
+        The collection focuses on software engineering research from major venues and journals 
+        in the field.
+      </p>
+
+      <h2 class="about_subtitle black">Technical Details</h2>
+      <p class="about_text black">
+        The search uses cosine similarity in the embedding space to find relevant papers. 
+        The system is built on modern vector search technology (Pinecone) for fast and 
+        efficient similarity searches across the entire collection.
+      </p>
+
+      <p class="about_text black attribution">
+        Based on <a href="https://github.com/augustwester/searchthearxiv/">searchthearxiv</a> 
+        by August Wester. 
+      </p>
+
+      <p class="about_text black">
+        <a href="https://www.monperrus.net/martin/">Martin Monperrus</a>. Feb 2025.
+      </p>
     </div>
   </body>
 </html>
