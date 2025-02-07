@@ -46,19 +46,26 @@ def get_ollama_embedding(text: str, model: str) -> list:
     return response.json().get('embedding', [])
 
 CONFIG = {
+    "0.0.0.0:8000": {
+        "site_title": "Local test",
+        "label_people": "Reviewers",
+        "model": "text-embedding-3-small",
+        "embedding_fn": "get_embedding",
+        "capabilities": ["credit"]
+    },
     "tse.local:8083": {
         "site_title": "Semantic TSE Reviewer Search",
         "label_people": "Reviewers",
         "model": "text-embedding-3-small",
         "embedding_fn": "get_embedding",
-        "capabilites": ["credit"]
+        "capabilities": ["credit"]
     },
     "se-search.local:8083": {
         "site_title": "Semantic Software Engineering Search",
         "label_people": "Authors",
         "model": "mxbai-embed-large",
         "embedding_fn": "get_ollama_embedding",
-        "capabilites": ["credit"]
+        "capabilities": []
     }
 }
 

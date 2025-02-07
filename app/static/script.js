@@ -1,3 +1,4 @@
+var globalConfig;
 var globalCSVData;
 
 $(window).bind("load", function () {
@@ -17,6 +18,14 @@ $(window).bind("load", function () {
 				}
 			});
 
+		}
+	});
+
+	$.ajax({
+		url: "/config",
+		type: "GET",
+		success: function (data) {
+			globalConfig = data;
 		}
 	});
 
@@ -257,7 +266,8 @@ function addAuthors(authors) {
 function addAuthor(author) {
 	// if the author is in globalCSVData, add the annotations
 	author.annotation = {};
-	if (globalCSVData) {
+	author.annotation.value = "";
+	if (globalCSVData && globalConfig.capabilities.includes("credit")) {
 		    // swith author.author to lastname, firstname
 			if (!author.author.includes(",")) {
 				author.author = author.author.split(" ").reverse().join(", ");
@@ -266,18 +276,22 @@ function addAuthor(author) {
 			if (annotationData) {
 				author.annotation = annotationData;
 				// the csv is the debt 
-				author.annotation.show = -annotationData["Reviewer Debt (Accepted Papers * 3 - Reviews Completed - Papers Handled) "];
+				author.annotation.value = -annotationData["Reviewer Debt (Accepted Papers * 3 - Reviews Completed - Papers Handled) "];
 			}
 	}
-	let dotClass = author.annotation.show > 0 ? "dot_green" : "dot_orange";
+	let dotClass = author.annotation.value > 0 ? "dot_green" : "dot_orange";
 	tooltip = JSON.stringify(author.annotation).replaceAll('"', "");
+	annotation_div = "";
+	if (author.annotation.value != "") {
+		annotation_div = `<div class="result_score black">
+			<p>Credits: ${author.annotation.value}</p>
+			<div class="result_dot ${dotClass}"></div>
+		</div>`;
+	}
 	html = `<div class="author_container">
     <div class="author_top_row" title="${tooltip}">
     <p class="author_name black">${author.author}</p>
-    <div class="result_score black">
-        <p>credit:${author.annotation.show}</p>
-        <div class="result_dot ${dotClass}"></div>
-    </div>
+    ${annotation_div}  
     </div>
     <div class="num_papers_container">
     <div class="author_num_papers_info_symbol" data-author="${author.author}" onmouseover="infoHover(this)" onmouseout="infoLeave()"></div>
