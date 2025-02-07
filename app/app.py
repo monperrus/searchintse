@@ -2,6 +2,10 @@ import flask
 import openai
 import os
 import requests  # Add this import
+import hashlib
+import json
+import pathlib
+from datetime import datetime
 #from dotenv import load_dotenv
 from pinecone import Pinecone
 import validators
@@ -44,6 +48,39 @@ def get_ollama_embedding(text: str, model: str) -> list:
     response = requests.post(url, json=payload)
     response.raise_for_status()
     return response.json().get('embedding', [])
+
+def get_cached_embedding(text: str, model: str) -> list:
+    """Get embedding from cache or compute and cache it"""
+    print("get_cached_embedding",request.host)
+    
+    cache_dir = f'embeddingjson-{model}'
+    pathlib.Path(cache_dir).mkdir(exist_ok=True)
+    
+    # Generate consistent filename from text
+    text_hash = hashlib.sha256(text.lower().encode('utf-8')).hexdigest()
+    cache_file = f"{cache_dir}/{text_hash}.json"
+    
+    # Check cache first
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as f:
+            data = json.load(f)
+            return data['embedding']
+    
+    # Get new embedding if not cached
+    fn = globals()[CONFIG[request.host]["embedding_fn"]]
+    embedding = fn(text, model)
+        
+    # Cache the result
+    data = {
+        "text": text,
+        "embedding": embedding,
+        "model": model,
+        "timestamp": datetime.now().isoformat()
+    }
+    with open(cache_file, 'w') as f:
+        json.dump(data, f, indent=2)
+    
+    return embedding
 
 CONFIG = {
     "0.0.0.0:8000": {
@@ -93,7 +130,7 @@ def search():
     query = request.args.get("query")
     # Get model from request, fallback to default
     model = request.args.get("model", "mxbai-embed-large")
-    print("model: ",model,request.host)
+    # print("model: ",model,request.host)
     index_name = "search-the-arxiv"
 
     # if host == se-search
@@ -121,11 +158,7 @@ def search():
         return error("Sorry! The length of your query cannot be too long.")
     
     # old version for TSE, using openai
-    print(request.host)
-    if request.host == "localhost" or request.host.startswith("0.0.0.0")  or request.host.startswith("127.0.0.1") or request.host.startswith("tse.local"):
-        embed = get_embedding(query, MODEL)
-    elif request.host.startswith("se-search"):
-        embed = get_ollama_embedding(query, model)
+    embed = get_cached_embedding(query, MODEL)
     
     # once we have the query embedding, find closest matches in Pinecone
     try:
