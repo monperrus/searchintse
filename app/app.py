@@ -51,9 +51,9 @@ def get_ollama_embedding(text: str, model: str) -> list:
 
 def get_cached_embedding(text: str, model: str) -> list:
     """Get embedding from cache or compute and cache it"""
-    print("get_cached_embedding",request.host)
+    print("get_cached_embedding",request.host,model)
     
-    cache_dir = f'embeddingjson-{model}'
+    cache_dir = f'embeddingjson'
     pathlib.Path(cache_dir).mkdir(exist_ok=True)
     
     # Generate consistent filename from text
