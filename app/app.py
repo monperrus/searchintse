@@ -58,7 +58,8 @@ def get_cached_embedding(text: str, model: str) -> list:
     
     # Generate consistent filename from text
     text_hash = hashlib.sha256(text.lower().encode('utf-8')).hexdigest()
-    cache_file = f"{cache_dir}/{text_hash}.json"
+    # the file name has to contain the model name, otherwise the cache will be shared between models of different embedding dimensions and semantics    
+    cache_file = f"{cache_dir}/{model}-{text_hash}.json"
     
     # Check cache first
     if os.path.exists(cache_file):
