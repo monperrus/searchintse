@@ -23,7 +23,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     raise ValueError("OPENAI_API_KEY not found in environment variables")
 
-MODEL = "text-embedding-3-small"
 
 def get_ollama_embedding(text: str, model: str) -> list:
     """Get embedding from local Ollama server
@@ -159,7 +158,7 @@ def search():
         return error("Sorry! The length of your query cannot be too long.")
     
     # old version for TSE, using openai
-    embed = get_cached_embedding(query, MODEL)
+    embed = get_cached_embedding(query, model)
     
     # once we have the query embedding, find closest matches in Pinecone
     try:
