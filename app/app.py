@@ -130,7 +130,7 @@ def about():
 def search():
     query = request.args.get("query")
     # Get model from request, fallback to default
-    model = request.args.get("model", "mxbai-embed-large")
+    model = request.args.get("model", CONFIG[request.host]["model"])
     # print("model: ",model,request.host)
     index_name = "search-the-arxiv"
 
