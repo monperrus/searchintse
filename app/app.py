@@ -87,6 +87,7 @@ CONFIG = {
         "site_title": "Local test",
         "label_people": "Reviewers",
         "model": "text-embedding-3-small",
+        "index": "search-the-arxiv",
         "embedding_fn": "get_embedding",
         "capabilities": ["credit"]
     },
@@ -94,6 +95,7 @@ CONFIG = {
         "site_title": "Semantic TSE Reviewer Search",
         "label_people": "Reviewers",
         "model": "text-embedding-3-small",
+        "index": "search-the-arxiv",
         "embedding_fn": "get_embedding",
         "capabilities": ["credit"]
     },
@@ -101,6 +103,7 @@ CONFIG = {
         "site_title": "Semantic Software Engineering Search",
         "label_people": "Authors",
         "model": "mxbai-embed-large",
+        "index": "se-mxbai-embed-large",
         "embedding_fn": "get_ollama_embedding",
         "capabilities": []
     }
@@ -131,11 +134,7 @@ def search():
     # Get model from request, fallback to default
     model = request.args.get("model", CONFIG[request.host]["model"])
     # print("model: ",model,request.host)
-    index_name = "search-the-arxiv"
-
-    # if host == se-search
-    if request.host.startswith("se-search"):
-        index_name = "se-"+model
+    index_name = CONFIG[request.host]["index"]
 
     # connect to Pinecone
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
@@ -172,3 +171,13 @@ def robots():
     with open("static/robots.txt", "r") as f:
         content = f.read()
     return content
+
+@app.route("/embedding")
+def get_embedding_route():
+    pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
+    index = pc.Index(CONFIG[request.host]["index"])
+    paper_id = request.args.get("id")
+    # print("paper_id",paper_id)
+    data = index.fetch([paper_id])
+    # print(data)
+    return flask.jsonify(data["vectors"][paper_id]["values"])

@@ -239,15 +239,114 @@ function addPaper(result) {
             <p>Go to Paper</p>
         </div>
         </a>
-        <a href="/?q=${encodeURIComponent(result.id)}" target="_blank">
+        <!-- find similar -->
+		<!-- <a href="/?q=${encodeURIComponent(result.id)}" target="_blank">
         <div class="result_button">
             <div class="similarity_symbol"></div>
             <p>Find Similar</p>
         </div>
-        </a>
+        </a> -->
+        <div class="result_button" onclick="showEmbedding('${result.id}', event)">
+            <div class="embedding_symbol"></div>
+            <p>Show Embedding</p>
+        </div>
     </div>
     </div>
 </div>`
+}
+
+function showEmbedding(id, event) {
+    event.stopPropagation();
+    
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'embedding-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    `;
+    
+    // Create modal content with styling
+    const content = document.createElement('div');
+    content.style.cssText = `
+        /* embedding background: white; */
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    `;
+    
+    // Add loading indicator
+    content.innerHTML = '<h3>Loading embedding visualization...</h3>';
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    
+    // Close modal on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+
+    // Fetch and display embedding data
+    fetch(`/embedding?id=${encodeURIComponent(id)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                content.innerHTML = `<h3>Error</h3><p>${data.error}</p>`;
+                return;
+            }
+            const normalized = normalizeEmbedding(data);
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">Embedding Visualization</h3>
+                    <div class="heatmap" style="margin: 20px 0;">${createHeatmap(normalized)}</div>
+                    <button onclick="this.closest('.embedding-modal').remove()" 
+                            style="padding: 8px 16px; 
+                                   border: none; 
+                                   background: #007bff; 
+                                   color: white; 
+                                   border-radius: 4px; 
+                                   cursor: pointer;">
+                        Close
+                    </button>
+                </div>
+            `;
+        });
+}
+
+function normalizeEmbedding(embedding) {
+    const min = Math.min(...embedding);
+    const max = Math.max(...embedding);
+    return embedding.map(v => (v - min) / (max - min));
+}
+
+function createHeatmap(normalized) {
+    const width = 32;
+    let html = '<div class="heatmap-grid" style="display: grid; grid-template-columns: repeat(32, 1fr); gap: 1px; background: #eee; padding: 10px;">';
+    
+    normalized.forEach(value => {
+        const color = getHeatmapColor(value);
+        html += `<div style="aspect-ratio: 1; background-color: ${color};"></div>`;
+    });
+    
+    return html + '</div>';
+}
+
+function getHeatmapColor(value) {
+    // Convert value to a blue-red gradient
+    const r = Math.floor(value * 255);
+    const b = Math.floor((1 - value) * 255);
+    return `rgb(${r}, 0, ${b})`;
 }
 
 function addAuthors(authors) {
