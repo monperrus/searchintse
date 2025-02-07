@@ -55,14 +55,14 @@ def annotations():
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template(f"about-{request.host}.html")
 
 @app.route("/search")
 def search():
     query = request.args.get("query")
     # Get model from request, fallback to default
     model = request.args.get("model", "mxbai-embed-large")
-    print("model: ",model)
+    print("model: ",model,request.host)
     index_name = "search-the-arxiv"
 
     # if host == se-search
