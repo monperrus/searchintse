@@ -53,7 +53,7 @@ def get_cached_embedding(text: str, model: str) -> list:
     print("get_cached_embedding",request.host,model)
     
     cache_dir = f'embeddingjson'
-    pathlib.Path(cache_dir).mkdir(exist_ok=True)
+    pathlib.Path(cache_dir).mkdir(exist_ok=True, parents=True)
     
     # Generate consistent filename from text
     text_hash = hashlib.sha256(text.lower().encode('utf-8')).hexdigest()
