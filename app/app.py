@@ -185,7 +185,7 @@ def robots():
         content = f.read()
     return content
 
-def get_embedding(paper_id):
+def get_embedding_paper(paper_id):
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
     index = pc.Index(CONFIG[request.host]["index"])
     data = index.fetch([paper_id])
@@ -193,4 +193,4 @@ def get_embedding(paper_id):
 
 @app.route("/embedding")
 def get_embedding_route():
-    return flask.jsonify(get_embedding(request.args.get("id")))
+    return flask.jsonify(get_embedding_paper(request.args.get("id")))
