@@ -37,7 +37,7 @@ def get_ollama_embedding(text: str, model: str) -> list:
     Raises:
         Exception: If embedding fails
     """
-    url = "http://localhost:8090/api/embeddings"
+    url = OLLAMA_URL
     payload = {
         "model": model,
         "prompt": text,
@@ -82,6 +82,8 @@ def get_cached_embedding(text: str, model: str) -> list:
     
     return embedding
 
+# OLLAMA_URL = "http://localhost:8090/api/embeddings"
+OLLAMA_URL = "http://130.237.224.95:8080/api/embeddings"
 CONFIG = {
     "0.0.0.0:8000": {
         "site_title": "Local test",
