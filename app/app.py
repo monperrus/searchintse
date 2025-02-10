@@ -99,7 +99,7 @@ CONFIG = {
         "embedding_fn": "get_embedding",
         "capabilities": ["credit"]
     },
-    "OLD_________se-search.local:8083": {
+    "se-search.local:8083": {
         "site_title": "Semantic Software Engineering Search",
         "label_people": "Authors",
         "model": "mxbai-embed-large",
@@ -107,7 +107,7 @@ CONFIG = {
         "embedding_fn": "get_ollama_embedding",
         "capabilities": []
     },
-    "se-search.local:8083": {
+    "OLD_________se-search.local:8083": {
         "site_title": "Semantic Software Engineering Search",
         "label_people": "Authors",
         "model": "jeffh/intfloat-multilingual-e5-large-instruct:f16",
@@ -130,7 +130,9 @@ def home():
 
 @app.route("/annotations")
 def annotations():
-    return open("tse.csv").read()
+    if request.host == "tse.local:8083":
+        return open("tse.csv").read()
+    return ""
 
 @app.route("/about")
 def about():
